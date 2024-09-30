@@ -1,0 +1,48 @@
+[
+    {
+      "model": "bangazonapi.store",
+      "pk": 1,
+      "fields": {
+        "seller": 5,
+        "name": "Gadget Emporium",
+        "description": "Your one-stop shop for the latest gadgets and tech."
+      }
+    },
+    {
+      "model": "bangazonapi.store",
+      "pk": 2,
+      "fields": {
+        "seller": 6,
+        "name": "Book Nook",
+        "description": "A cozy little store for book lovers."
+      }
+    },
+    {
+      "model": "bangazonapi.store",
+      "pk": 3,
+      "fields": {
+        "seller": 7,
+        "name": "Fresh Greens",
+        "description": "Organic produce and fresh farm-to-table offerings."
+      }
+    },
+    {
+      "model": "bangazonapi.store",
+      "pk": 4,
+      "fields": {
+        "seller": 8,
+        "name": "Fashion Forward",
+        "description": "Trendy and affordable clothing for all."
+      }
+    },
+    {
+      "model": "bangazonapi.store",
+      "pk": 5,
+      "fields": {
+        "seller": 5,
+        "name": "Gamer's Paradise",
+        "description": "The best spot for video games, consoles, and accessories."
+      }
+    }
+  ]
+  
