@@ -296,15 +296,4 @@ class Products(ViewSet):
         return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
 
-    @action(methods=['delete'], detail=True, url_path='remove_from_order')
-    def remove_from_order(self, request, pk=None):
-        from .cart import Cart
-        cart = Cart.list(request.auth.user)
-        item_to_remove = self.get_object()
-        line_item = cart.lineitems.filter(product=item_to_remove).first()
-
-        if line_item:
-            line_item.delete()  # Remove the line item from the cart
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+  
