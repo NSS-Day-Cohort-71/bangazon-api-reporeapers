@@ -8,9 +8,10 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from bangazonapi.models import Product, Customer, ProductCategory
+from bangazonapi.models import Product, Customer, ProductCategory, OrderProduct
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
+
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -293,3 +294,17 @@ class Products(ViewSet):
             return Response(None, status=status.HTTP_204_NO_CONTENT)
 
         return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+
+    @action(methods=['delete'], detail=True, url_path='remove_from_order')
+    def remove_from_order(self, request, pk=None):
+        from .cart import Cart
+        cart = Cart.list(request.auth.user)
+        item_to_remove = self.get_object()
+        line_item = cart.lineitems.filter(product=item_to_remove).first()
+
+        if line_item:
+            line_item.delete()  # Remove the line item from the cart
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
