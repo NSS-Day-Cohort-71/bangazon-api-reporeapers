@@ -150,3 +150,23 @@ class Orders(ViewSet):
             orders, many=True, context={'request': request})
 
         return Response(json_orders.data)
+    
+    @action(methods=['put'], detail=True)
+    def complete(self, request, pk=None):
+        """Complete an order by adding a payment type."""
+        try:
+            customer = Customer.objects.get(user=request.auth.user)
+            order = Order.objects.get(pk=pk, customer=customer)
+
+            # Ensure the payment_type_id is provided in the request data
+            if "payment_type_id" not in request.data:
+                return Response({"message": "Payment type ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Set the payment type and save the order
+            order.payment_type_id = request.data["payment_type_id"]
+            order.save()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Order.DoesNotExist:
+            return Response({'message': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
