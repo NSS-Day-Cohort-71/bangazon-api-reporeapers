@@ -97,4 +97,17 @@ class ProductTests(APITestCase):
 
     # TODO: Delete product
 
+    def test_delete_product(self):
+
+        self.test_create_product()
+
+        url = '/products/1'
+
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # GET the game again to verify you get a 404 response
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     # TODO: Product can be rated. Assert average rating exists.
