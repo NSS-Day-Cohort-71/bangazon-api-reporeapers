@@ -29,6 +29,23 @@ class OrderTests(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+        # Create payment type
+        url = '/paymenttypes'
+        data = { "url": "http://localhost:8000/paymenttypes/1", "merchant_name": "new card", "account_number": "123456789", "expiration_date": "2027-01-01", "create_date": "2024-10-08"}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        #create an order
+        url = '/orders'
+        data = {}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+    
+
 
     def test_add_product_to_order(self):
         """
@@ -80,5 +97,15 @@ class OrderTests(APITestCase):
         self.assertEqual(len(json_response["lineitems"]), 0)
 
     # TODO: Complete order by adding payment type
+
+    def test_add_payment_type_to_order(self): 
+        url = "/orders/1/complete"
+        data = {"payment_type_id": 1}
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+
+        response = self.client.put(url, data, format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        
 
     # TODO: New line item is not added to closed order

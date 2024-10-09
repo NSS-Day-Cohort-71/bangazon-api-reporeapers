@@ -170,3 +170,41 @@ class Orders(ViewSet):
 
         except Order.DoesNotExist:
             return Response({'message': 'Order not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def create(self, request):
+        """
+        @api {POST} /orders POST new order
+        @apiName CreateOrder
+        @apiGroup Orders
+
+        @apiHeader {String} Authorization Auth token
+        @apiHeaderExample {String} Authorization
+            Token 9ba45f09651c5b0c404f37a2d2572c026c146611
+
+        @apiSuccess (201) {id} id Order id
+        @apiSuccess (201) {String} url Order URI
+        @apiSuccess (201) {String} created_date Date order was created
+        @apiSuccess (201) {String} payment_type Payment URI
+        @apiSuccess (201) {String} customer Customer URI
+
+        @apiSuccessExample {json} Success
+            {
+                "id": 1,
+                "url": "http://localhost:8000/orders/1",
+                "created_date": "2024-10-09",
+                "payment_type": null,
+                "customer": "http://localhost:8000/customers/1"
+            }
+        """
+        customer = Customer.objects.get(user=request.auth.user)
+
+        # Create a new order
+        new_order = Order.objects.create(
+            created_date=datetime.date.today(),
+            customer=customer,
+            payment_type=None  # Payment type can be added later
+        )
+
+        serializer = OrderSerializer(new_order, context={'request': request})
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
