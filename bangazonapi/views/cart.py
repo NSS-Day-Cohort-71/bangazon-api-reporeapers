@@ -127,11 +127,4 @@ class Cart(ViewSet):
 
         return Response(final)
     
-    def update(self, request):
-
-        cart = Cart.objects.get()
-        cart.payment_type = request.data["payment_type"]
-
-        cart.save()
-
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
+    
